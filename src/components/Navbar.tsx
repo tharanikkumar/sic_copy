@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 const Navbar = () => {
   return (
     <header className=" shadow">
@@ -20,6 +21,8 @@ const Navbar = () => {
     </div>
 
     <div className="text-lg font-bold">School Innovation Council</div>
+  
+    
    
   </div>
 </nav>

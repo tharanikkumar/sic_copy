@@ -3,10 +3,10 @@ import { Input } from '../../components/ui/Input';
 import { Label } from '../../components/ui/Label';
 import { LabelInputContainer } from '../adminpages/Login';
 import { useState, useEffect } from 'react';
-
+import { BACKEND_URL } from "../../../config";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import { Select  } from '../../components/ui/Input';
 const EditEvaluator = () => {
   const [formData, setFormData] = useState({
     email: 'johndoe@example.com',
@@ -23,9 +23,9 @@ const EditEvaluator = () => {
     city: 'Sample City',
     state: 'Sample State',
     knowledge_domain: 'Engineering',
-    theme_preference_1: 'Innovation',
-    theme_preference_2: 'Technology',
-    theme_preference_3: 'Startups',
+    theme_preference_1: '1',
+    theme_preference_2: '2',
+    theme_preference_3: '3',
     expertise_in_startup_value_chain: 'Mentorship',
     role_interested: 'Evaluator',
     delete_status: 0,
@@ -288,44 +288,55 @@ const EditEvaluator = () => {
             </LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="theme_preference_1">Theme Preference 1</Label>
-              <Input
-                id="theme_preference_1"
-                placeholder="Theme Preference 1"
-                name="theme_preference_1"
-                type="text"
-                className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.theme_preference_1}
-                onChange={handleInputChange}
-              />
-            </LabelInputContainer>
+  <Label htmlFor="theme_preference_3">Theme Preference 1</Label>
+  <Select
+    id="theme_preference_3"
+    name="theme_preference_3"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_1}
+    onChange={handleInputChange}
+  >
+    <option value="" disabled>Select a theme</option>
+    <option value="1">Light Theme</option>
+    <option value="2">Dark Theme</option>
+    <option value="3">Blue Theme</option>
+    <option value="4">Green Theme</option>
+  </Select>
+</LabelInputContainer>
+
+<LabelInputContainer className="mb-4">
+  <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
+  <Select
+    id="theme_preference_3"
+    name="theme_preference_3"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_2}
+    onChange={handleInputChange}
+  >
+    <option value="" disabled>Select a theme</option>
+    <option value="1">Light Theme</option>
+    <option value="2">Dark Theme</option>
+    <option value="3">Blue Theme</option>
+    <option value="4">Green Theme</option>
+  </Select>
+</LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="theme_preference_2">Theme Preference 2</Label>
-              <Input
-                id="theme_preference_2"
-                placeholder="Theme Preference 2"
-                name="theme_preference_2"
-                type="text"
-                className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.theme_preference_2}
-                onChange={handleInputChange}
-              />
-            </LabelInputContainer>
-
-            <LabelInputContainer className="mb-4">
-              <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
-              <Input
-                id="theme_preference_3"
-                placeholder="Theme Preference 3"
-                name="theme_preference_3"
-                type="text"
-                className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.theme_preference_3}
-                onChange={handleInputChange}
-              />
-              
-            </LabelInputContainer>
+  <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
+  <Select
+    id="theme_preference_3"
+    name="theme_preference_3"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_3}
+    onChange={handleInputChange}
+  >
+    <option value="" disabled>Select a theme</option>
+    <option value="1">Light Theme</option>
+    <option value="2">Dark Theme</option>
+    <option value="3">Blue Theme</option>
+    <option value="4">Green Theme</option>
+  </Select>
+</LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
               <Label htmlFor="expertise_in_startup_value_chain">Expertise in Startup Value Chain</Label>

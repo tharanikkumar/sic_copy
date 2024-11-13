@@ -68,6 +68,7 @@ const Ideainput = () => {
         <div>
             <Navbar />
             <Topbar/>
+            <div className="mr-20 ml-20 mt-10 mb-6 bg-white rounded-lg overflow-hidden">
             <div className="bg-sky-900 text-white text-3xl font-bold py-4 px-6 text-center">
                 Idea Input
             </div>
@@ -77,7 +78,7 @@ const Ideainput = () => {
 
             <form className="p-6 md:p-9 space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* CSV Upload */}
+                
                     <LabelInputContainer className="mb-4">
                         <Label htmlFor="csvFile">Upload CSV</Label>
                         <Input
@@ -163,6 +164,8 @@ const Ideainput = () => {
                     Register
                 </button>
             </form>
+            </div>
+        
         </div>
     );
 };

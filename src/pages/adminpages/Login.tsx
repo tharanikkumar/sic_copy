@@ -1,40 +1,72 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../../components/ui/Input";
 import { cn } from "../../utils/cn";
+
 import { useState } from "react";
 import { BACKEND_URL } from "../../../config";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer,toast } from "react-toastify"; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css';
 export function Login() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
       });
-     
-  const handleSubmit = async  (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-   try{
-    console.log(BACKEND_URL);
-const response=await axios.post(`${BACKEND_URL}/adminlogin`,formData,{
-    withCredentials: true,
-})
-console.log(response)
-const admin_id=response.data.data;
-localStorage.setItem("admin_id",admin_id);
-const user=response.data.message;
-
-if(user==="admin"){
-  navigate("/admindashboard")
-   }}catch(e:unknown){
-    console.log(e)
-   }
+    //   useEffect(() => {
+    //     const cookie = Cookies.get('userdata');
+    //     if (cookie) {
+    //         try {
+    //           const decoded = jwt_decode(cookie);
+               
+    //             if (decoded.role === 'admin') {
+    //                 navigate("/admindashboard"); 
+    //             }
+    //         } catch (error) {
+    //             console.error("Error parsing cookie", error);
+    //         }
+    //     }
+    // }, [navigate]);
+    useEffect(()=>{
+      if(localStorage.getItem("role")=="admin"){
+        navigate("/admindashboard")
+    }
+    })
     
-  };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+  
+      // Toastify promise integration
+      toast.promise(
+        axios.post(`${BACKEND_URL}/signin_admin.php`, formData, { withCredentials: true }), 
+        {
+          pending: 'Logging in...', 
+        }
+      ).then(response => {
+        if (response.data.message === "success") {
+          toast.success("Success Logged In !", {
+            position: "top-right"
+          });
+        }
+        else {
+          toast.error("Invalid Credentials", {
+            position: "top-right"
+          });
+        }
+        const user = response.data.role;
+        if (user === "admin") {
+          localStorage.setItem("role", "admin");
+          navigate("/admindashboard");
+        }
+      }).catch(e => {
+        console.error(e);
+      });
+    };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -87,6 +119,8 @@ Student Innovation Council
    
       </form>
     </div>
+    <ToastContainer />
+
     </div>
   );
 }

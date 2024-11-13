@@ -1,11 +1,12 @@
 import Navbar from '../components/Navbar';
-import { Input } from '../components/ui/Input';
+import { Input, Select } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
 import { LabelInputContainer } from './adminpages/Login';
 import { useState } from 'react';
 import { BACKEND_URL } from "../../config";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 const EvaluatorRegistration = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -31,6 +32,21 @@ const EvaluatorRegistration = () => {
     evaluator_status:0
   });
   const [errors, setErrors] = useState({});
+  const validateThemePreferences = (field: string, value: any, formData: Record<string, any>) => {
+   
+    const themeFields = ['theme_preference_1', 'theme_preference_2', 'theme_preference_3'];
+  
+  
+    const otherFields = themeFields.filter(f => f !== field);
+  
+    // Check if any of the other fields have the same value
+    for (const otherField of otherFields) {
+      if (formData[otherField] === value) {
+        return `${field.replace(/_/g, ' ')} should not have the same value as ${otherField.replace(/_/g, ' ')}`;
+      }
+    }
+    return null;
+  };
   
   const validateForm = () => {
     const requiredFields = [
@@ -40,13 +56,20 @@ const EvaluatorRegistration = () => {
       'theme_preference_1', 'theme_preference_2', 'theme_preference_3', 
       'expertise_in_startup_value_chain', 'role_interested'
     ];
-  
+
     const newErrors: Record<string, string> = requiredFields.reduce((errors: Record<string, string>, field: string) => {
       const value = formData[field as keyof typeof formData];
 
       if (!value && value !== 0) {
         errors[field] = `${field.replace(/_/g, ' ')} is required`;
         return errors;
+      }
+      if (field.startsWith("theme_preference")) {
+        const duplicateError = validateThemePreferences(field, value, formData);
+        if (duplicateError) {
+          errors[field] = duplicateError;
+          return errors;
+        }
       }
 
       if (field === 'first_name' || field === 'last_name' || field === 'gender') {
@@ -91,14 +114,14 @@ const EvaluatorRegistration = () => {
 
       return errors;
     }, {});
-  
+
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
       const errorMessages = Object.values(newErrors).join('\n');
       window.alert(errorMessages);
       return false;
     }
-    
+  
     return true;
   };
   
@@ -119,10 +142,20 @@ const EvaluatorRegistration = () => {
       console.log(formData);
       try {
 
-        await axios.post(`${BACKEND_URL}/evaluator_registration`, formData, {
+       const response= await axios.post(`${BACKEND_URL}register_evaluator.php`, formData, {
           withCredentials: true,
         });
-       
+
+  
+       if(response.data.message){
+        alert("Please wait for admin approval");
+        return;
+       }
+       else{
+        console.log(response.data);
+
+        return;
+       }
       } catch (error) {
         console.error("Failed to submit:", error);
       }
@@ -328,44 +361,56 @@ const EvaluatorRegistration = () => {
             </LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="theme_preference_1">Theme Preference 1</Label>
-              <Input
-                id="theme_preference_1"
-                placeholder="Theme Preference 1"
-                name="theme_preference_1"
-                type="text"
-                className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.theme_preference_1}
-                onChange={handleInputChange}
-              />
-            </LabelInputContainer>
+  <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
+  <Select
+    id="theme_preference_3"
+    name="theme_preference_3"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_3}
+    onChange={handleInputChange}
+  >
+    <option value="" disabled>Select a theme</option>
+    <option value="1">Light Theme</option>
+    <option value="2">Dark Theme</option>
+    <option value="3">Blue Theme</option>
+    <option value="4">Green Theme</option>
+  </Select>
+</LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="theme_preference_2">Theme Preference 2</Label>
-              <Input
-                id="theme_preference_2"
-                placeholder="Theme Preference 2"
-                name="theme_preference_2"
-                type="text"
-                className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.theme_preference_2}
-                onChange={handleInputChange}
-              />
-            </LabelInputContainer>
+  <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
+  <Select
+    id="theme_preference_3"
+    name="theme_preference_3"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_3}
+    onChange={handleInputChange}
+  >
+    <option value="" disabled>Select a theme</option>
+    <option value="1">Light Theme</option>
+    <option value="2">Dark Theme</option>
+    <option value="3">Blue Theme</option>
+    <option value="4">Green Theme</option>
+  </Select>
+</LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
-              <Input
-                id="theme_preference_3"
-                placeholder="Theme Preference 3"
-                name="theme_preference_3"
-                type="text"
-                className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.theme_preference_3}
-                onChange={handleInputChange}
-              />
-              
-            </LabelInputContainer>
+  <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
+  <Select
+    id="theme_preference_3"
+    name="theme_preference_3"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_3}
+    onChange={handleInputChange}
+  >
+    <option value="" disabled>Select a theme</option>
+    <option value="1">Light Theme</option>
+    <option value="2">Dark Theme</option>
+    <option value="3">Blue Theme</option>
+    <option value="4">Green Theme</option>
+  </Select>
+</LabelInputContainer>
+
 
             <LabelInputContainer className="mb-4">
               <Label htmlFor="expertise_in_startup_value_chain">Expertise in Startup Value Chain</Label>
@@ -403,6 +448,7 @@ const EvaluatorRegistration = () => {
           </button>
         </form>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

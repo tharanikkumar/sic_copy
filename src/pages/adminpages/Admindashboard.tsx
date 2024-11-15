@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { BACKEND_URL } from '../../../config';
 import { Link, useNavigate } from 'react-router-dom';
 import Topbar from '../../components/Topbar';
-import Cookies from 'js-cookie';
+
 import Navbar from '../../components/Navbar';
 import axios from 'axios';
 
@@ -13,9 +13,6 @@ const AdminDashboard = () => {
   const [selectedEvaluator, setSelectedEvaluator] = useState(null);
   const [evaluators, setEvaluators] = useState([]);
   const [stats, setStats] = useState({
-    totalEvaluators: 1,
-    pendingVerifications: 0,
-    totalIdeas: 0,
   });
 
   const handleVerifyClick = (evaluator: any) => {
@@ -40,19 +37,14 @@ useEffect(() => {
         });
           console.log(response.data);
           setEvaluators(response.data.evaluators);
+          setStats({
+            totalEvaluators: response.data.common_statistics.total_evaluators,
+            pendingVerifications: response.data.common_statistics.pending_evaluators,
+            totalIdeas: response.data.common_statistics.ideas_registered,
+          });
   
       } catch (error) {
         console.error('Error fetching evaluators:', error);
-        // Set default evaluator data in case of an error
-        const defaultEvaluators = [
-          {
-            id: 1,
-            name: "rakesh",
-            email: "rakesh@gmail.com",
-            status: 0
-          }
-        ];
-        setEvaluators(defaultEvaluators);
       }
     };
 

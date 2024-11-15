@@ -161,7 +161,7 @@ const Ideainput = () => {
                     type="submit"
                     className="w-full bg-blue-600 text-white py-3 font-semibold rounded-md hover:bg-blue-700 transition duration-300"
                 >
-                    Register
+                   Add Idea 
                 </button>
             </form>
             </div>

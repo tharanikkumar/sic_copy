@@ -41,7 +41,7 @@ export function Login() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
   
-      // Toastify promise integration
+    
       toast.promise(
         axios.post(`${BACKEND_URL}/signin_admin.php`, formData, { withCredentials: true }), 
         {
@@ -54,13 +54,13 @@ export function Login() {
           });
         }
         else {
+          console.log(response.data);
           toast.error("Invalid Credentials", {
             position: "top-right"
           });
         }
         const user = response.data.role;
         if (user === "admin") {
-          localStorage.setItem("role", "admin");
           navigate("/admindashboard");
         }
       }).catch(e => {
@@ -112,11 +112,6 @@ Student Innovation Council
          </span>
          
         </Link>
-       
-
-        
-
-   
       </form>
     </div>
     <ToastContainer />

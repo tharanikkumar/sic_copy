@@ -7,6 +7,7 @@ import { BACKEND_URL } from "../../../config";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Select  } from '../../components/ui/Input';
+import { toast } from 'react-toastify';
 const EditEvaluator = () => {
   const [formData, setFormData] = useState({
     email: 'johndoe@example.com',
@@ -37,7 +38,7 @@ const EditEvaluator = () => {
   useEffect(() => {
     const fetchEvaluatorData = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/evaluator/1`);
+        const response = await axios.get(`${BACKEND_URL}evaluator/1`);
         setFormData(response.data);
       } catch (error) {
         console.error("Failed to fetch evaluator data:", error);
@@ -83,12 +84,22 @@ const EditEvaluator = () => {
     if (validateForm()) {
       console.log(formData);
       try {
-        await axios.put(`${BACKEND_URL}/evaluator/1`, formData, {
+        toast.promise(
+        await axios.put(`${BACKEND_URL}edit_evaluator/1`, formData, {
           withCredentials: true,
+        }),{
+          pending: "Updating Evaluator Details...",
+        }).then((response:any)=>{
+          if (response.data.message) {
+            toast.success(response.data.message);
+               return;
+             } else {
+               console.log(response.data);
+             }
         });
-        alert("Evaluator details updated successfully!");
       } catch (error) {
         console.error("Failed to update evaluator details:", error);
+        toast.error('Unable to Update');
       }
     }
   };

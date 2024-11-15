@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { BACKEND_URL } from "../../config";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 const EvaluatorRegistration = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -14,9 +14,9 @@ const EvaluatorRegistration = () => {
     first_name: '',
     last_name: '',
     gender: '',
-    alternative_email: '',
+    alternate_email: '',
     phone_number: '',
-    alternative_phone_number: '',
+    alternate_phone_number: '',
     college_name: '',
     designation: '',
     total_experience: '',
@@ -28,8 +28,8 @@ const EvaluatorRegistration = () => {
     theme_preference_3: '',
     expertise_in_startup_value_chain: '',
     role_interested: '',
-    delete_status: 0,
-    evaluator_status:0
+    delete_status: "0",
+    evaluator_status:"3"
   });
   const [errors, setErrors] = useState({});
   const validateThemePreferences = (field: string, value: any, formData: Record<string, any>) => {
@@ -50,8 +50,8 @@ const EvaluatorRegistration = () => {
   
   const validateForm = () => {
     const requiredFields = [
-      'email', 'password', 'first_name', 'last_name', 'gender', 'alternative_email', 
-      'phone_number', 'alternative_phone_number', 'college_name', 'designation', 
+      'email', 'password', 'first_name', 'last_name', 'gender', 'alternate_email', 
+      'phone_number', 'alternate_phone_number', 'college_name', 'designation', 
       'total_experience', 'city', 'state', 'knowledge_domain', 
       'theme_preference_1', 'theme_preference_2', 'theme_preference_3', 
       'expertise_in_startup_value_chain', 'role_interested'
@@ -79,7 +79,7 @@ const EvaluatorRegistration = () => {
         }
       }
 
-      if (field === 'phone_number' || field === 'alternative_phone_number') {
+      if (field === 'phone_number' || field === 'alternate_phone_number') {
         if (!/^\d{10}$/.test(String(value))) {  // Ensure it's exactly 10 digits
           errors[field] = `${field.replace(/_/g, ' ')} should be a 10-digit number`;
         }
@@ -118,7 +118,8 @@ const EvaluatorRegistration = () => {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
       const errorMessages = Object.values(newErrors).join('\n');
-      window.alert(errorMessages);
+     
+      toast.error(errorMessages);
       return false;
     }
   
@@ -139,31 +140,30 @@ const EvaluatorRegistration = () => {
     e.preventDefault();
     
     if (validateForm()) {
-      console.log(formData);
       try {
-
-       const response= await axios.post(`${BACKEND_URL}register_evaluator.php`, formData, {
-          withCredentials: true,
-        });
-
-  
-       if(response.data.message){
-        alert("Please wait for admin approval");
-        return;
-       }
-       else{
-        console.log(response.data);
-
-        return;
-       }
+        const response = await toast.promise(
+          axios.post(`${BACKEND_URL}register_evaluator.php`, formData, {
+            withCredentials: true,
+          }),
+          {
+            pending: 'Submitting...',
+          }
+        );
+console.log(response.data);
+        if (response.data.message) {
+          toast.success(response.data.message+"Please wait till the  admin approves your request");;
+        } else {
+        toast.error(response.data.error);
+        }
       } catch (error) {
-        console.error("Failed to submit:", error);
+        console.error('Error submitting form:', error);
+        toast.error('Unable to Submit');
       }
-    } else {
-     
-      console.log(errors);
     }
   };
+
+
+
 
   return (
     <div>
@@ -218,19 +218,19 @@ const EvaluatorRegistration = () => {
             </LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="alternative_email">Alternative Email</Label>
+              <Label htmlFor="alternate_email">Alternative Email</Label>
               <Input
-                id="alternative_email"
+                id="alternate_email"
                 placeholder="Alternative Email"
-                name="alternative_email"
+                name="alternate_email"
                 type="email"
                 className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.alternative_email}
+                value={formData.alternate_email}
                 onChange={handleInputChange}
               />
             </LabelInputContainer>
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="alternative_email">Password</Label>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 placeholder="Password"
@@ -257,14 +257,14 @@ const EvaluatorRegistration = () => {
             </LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="alternative_phone_number">Alternative Phone Number</Label>
+              <Label htmlFor="alternate_phone_number">Alternative Phone Number</Label>
               <Input
-                id="alternative_phone_number"
+                id="alternate_phone_number"
                 placeholder="Alternative Phone Number"
-                name="alternative_phone_number"
+                name="alternate_phone_number"
                 type="text"
                 className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.alternative_phone_number}
+                value={formData.alternate_phone_number}
                 onChange={handleInputChange}
                 maxLength={10}
               />
@@ -359,8 +359,101 @@ const EvaluatorRegistration = () => {
                 onChange={handleInputChange}
               />
             </LabelInputContainer>
-
             <LabelInputContainer className="mb-4">
+  <Label htmlFor="theme_preference_1">Theme Preference 1</Label>
+  <Select
+    id="theme_preference_1"
+    name="theme_preference_1"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_1}
+    onChange={handleInputChange}
+  >
+    <option value="" disabled>Select a theme</option>
+    <option value="1">Food Processing/Nutrition/Biotech</option>
+    <option value="2">Healthcare & Biomedical devices</option>
+    <option value="3">ICT, Cyber-physical systems, Blockchain, Cognitive computing, Cloud computing, AI & ML</option>
+    <option value="4">Infrastructure</option>
+    <option value="5">IoT based technologies (e.g. Security & Surveillance systems etc)</option>
+    <option value="6">Consumer Goods and Retail</option>
+    <option value="7">Defence & Security</option>
+    <option value="8">Education</option>
+    <option value="9">Fashion and Textiles</option>
+    <option value="10">Finance Life Sciences</option>
+    <option value="11">Agriculture & Rural Development</option>
+    <option value="12">Clean & Potable water</option>
+    <option value="13">Software-Web App Development</option>
+    <option value="14">Sports & Fitness</option>
+    <option value="15">Sustainable Environment</option>
+    <option value="16">Travel & Tourism</option>
+    <option value="17">Waste Management/Waste to Wealth Creation</option>
+    <option value="18">Smart Cities</option>
+    <option value="19">Smart Education</option>
+    <option value="20">Smart Textiles</option>
+    <option value="21">Smart Vehicles/Electric vehicle/Electric vehicle motor and battery technology</option>
+    <option value="22">Software-Mobile App Development</option>
+    <option value="23">Manufacturing</option>
+    <option value="24">Mining, Metals, Materials</option>
+    <option value="25">Other Emerging Areas Innovation for Start-ups</option>
+    <option value="26">Renewable and Affordable Energy</option>
+    <option value="27">Robotics and Drones</option>
+    <option value="28">Venture Planning and Enterprise/Startup</option>
+    <option value="29">IP Generation & Protection</option>
+    <option value="30">Business Modeling/Plan Development</option>
+    <option value="31">Design Thinking</option>
+    <option value="32">Idea Generation & Validation</option>
+    <option value="33">Incubation/Innovation Management</option>
+    <option value="34">Investment and Market Analyst</option>
+  </Select>
+</LabelInputContainer>
+
+<LabelInputContainer className="mb-4">
+  <Label htmlFor="theme_preference_2">Theme Preference 2</Label>
+  <Select
+    id="theme_preference_2"
+    name="theme_preference_2"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_2}
+    onChange={handleInputChange}
+  >
+    <option value="" disabled>Select a theme</option>
+    <option value="1">Food Processing/Nutrition/Biotech</option>
+    <option value="2">Healthcare & Biomedical devices</option>
+    <option value="3">ICT, Cyber-physical systems, Blockchain, Cognitive computing, Cloud computing, AI & ML</option>
+    <option value="4">Infrastructure</option>
+    <option value="5">IoT based technologies (e.g. Security & Surveillance systems etc)</option>
+    <option value="6">Consumer Goods and Retail</option>
+    <option value="7">Defence & Security</option>
+    <option value="8">Education</option>
+    <option value="9">Fashion and Textiles</option>
+    <option value="10">Finance Life Sciences</option>
+    <option value="11">Agriculture & Rural Development</option>
+    <option value="12">Clean & Potable water</option>
+    <option value="13">Software-Web App Development</option>
+    <option value="14">Sports & Fitness</option>
+    <option value="15">Sustainable Environment</option>
+    <option value="16">Travel & Tourism</option>
+    <option value="17">Waste Management/Waste to Wealth Creation</option>
+    <option value="18">Smart Cities</option>
+    <option value="19">Smart Education</option>
+    <option value="20">Smart Textiles</option>
+    <option value="21">Smart Vehicles/Electric vehicle/Electric vehicle motor and battery technology</option>
+    <option value="22">Software-Mobile App Development</option>
+    <option value="23">Manufacturing</option>
+    <option value="24">Mining, Metals, Materials</option>
+    <option value="25">Other Emerging Areas Innovation for Start-ups</option>
+    <option value="26">Renewable and Affordable Energy</option>
+    <option value="27">Robotics and Drones</option>
+    <option value="28">Venture Planning and Enterprise/Startup</option>
+    <option value="29">IP Generation & Protection</option>
+    <option value="30">Business Modeling/Plan Development</option>
+    <option value="31">Design Thinking</option>
+    <option value="32">Idea Generation & Validation</option>
+    <option value="33">Incubation/Innovation Management</option>
+    <option value="34">Investment and Market Analyst</option>
+  </Select>
+</LabelInputContainer>
+
+<LabelInputContainer className="mb-4">
   <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
   <Select
     id="theme_preference_3"
@@ -370,46 +463,43 @@ const EvaluatorRegistration = () => {
     onChange={handleInputChange}
   >
     <option value="" disabled>Select a theme</option>
-    <option value="1">Light Theme</option>
-    <option value="2">Dark Theme</option>
-    <option value="3">Blue Theme</option>
-    <option value="4">Green Theme</option>
+    <option value="1">Food Processing/Nutrition/Biotech</option>
+    <option value="2">Healthcare & Biomedical devices</option>
+    <option value="3">ICT, Cyber-physical systems, Blockchain, Cognitive computing, Cloud computing, AI & ML</option>
+    <option value="4">Infrastructure</option>
+    <option value="5">IoT based technologies (e.g. Security & Surveillance systems etc)</option>
+    <option value="6">Consumer Goods and Retail</option>
+    <option value="7">Defence & Security</option>
+    <option value="8">Education</option>
+    <option value="9">Fashion and Textiles</option>
+    <option value="10">Finance Life Sciences</option>
+    <option value="11">Agriculture & Rural Development</option>
+    <option value="12">Clean & Potable water</option>
+    <option value="13">Software-Web App Development</option>
+    <option value="14">Sports & Fitness</option>
+    <option value="15">Sustainable Environment</option>
+    <option value="16">Travel & Tourism</option>
+    <option value="17">Waste Management/Waste to Wealth Creation</option>
+    <option value="18">Smart Cities</option>
+    <option value="19">Smart Education</option>
+    <option value="20">Smart Textiles</option>
+    <option value="21">Smart Vehicles/Electric vehicle/Electric vehicle motor and battery technology</option>
+    <option value="22">Software-Mobile App Development</option>
+    <option value="23">Manufacturing</option>
+    <option value="24">Mining, Metals, Materials</option>
+    <option value="25">Other Emerging Areas Innovation for Start-ups</option>
+    <option value="26">Renewable and Affordable Energy</option>
+    <option value="27">Robotics and Drones</option>
+    <option value="28">Venture Planning and Enterprise/Startup</option>
+    <option value="29">IP Generation & Protection</option>
+    <option value="30">Business Modeling/Plan Development</option>
+    <option value="31">Design Thinking</option>
+    <option value="32">Idea Generation & Validation</option>
+    <option value="33">Incubation/Innovation Management</option>
+    <option value="34">Investment and Market Analyst</option>
   </Select>
 </LabelInputContainer>
 
-            <LabelInputContainer className="mb-4">
-  <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
-  <Select
-    id="theme_preference_3"
-    name="theme_preference_3"
-    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-    value={formData.theme_preference_3}
-    onChange={handleInputChange}
-  >
-    <option value="" disabled>Select a theme</option>
-    <option value="1">Light Theme</option>
-    <option value="2">Dark Theme</option>
-    <option value="3">Blue Theme</option>
-    <option value="4">Green Theme</option>
-  </Select>
-</LabelInputContainer>
-
-            <LabelInputContainer className="mb-4">
-  <Label htmlFor="theme_preference_3">Theme Preference 3</Label>
-  <Select
-    id="theme_preference_3"
-    name="theme_preference_3"
-    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-    value={formData.theme_preference_3}
-    onChange={handleInputChange}
-  >
-    <option value="" disabled>Select a theme</option>
-    <option value="1">Light Theme</option>
-    <option value="2">Dark Theme</option>
-    <option value="3">Blue Theme</option>
-    <option value="4">Green Theme</option>
-  </Select>
-</LabelInputContainer>
 
 
             <LabelInputContainer className="mb-4">
@@ -448,7 +538,18 @@ const EvaluatorRegistration = () => {
           </button>
         </form>
       </div>
-      <ToastContainer/>
+      <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="colored"
+/>
     </div>
   );
 };

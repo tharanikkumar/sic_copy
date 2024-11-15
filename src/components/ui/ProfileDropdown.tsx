@@ -9,23 +9,24 @@ const ProfileDropdown = ({ userName }: { userName: string }) => {
 
     const handleLogout = async () => {
         try {
-    
-            const response = axios.post(`${BACKEND_URL}logout.php`, {
-                credentials: 'include',  
-                headers: {
-                    'Content-Type': 'application/json', 
-                },
+            const response = await axios.post(`${BACKEND_URL}logout.php`, {}, {
+                withCredentials: true
             });
     
-            if (!response) {
-                throw new Error('Logout failed');
+            console.log(response.data);  
+            
+            if (response.data.error) {
+                throw new Error(response.data.error);
             }
-            navigate('/')
-            localStorage.removeItem('role')  // Redirect to login page after logout
+    
+            
+            localStorage.removeItem('role');
+            navigate('/'); 
         } catch (error) {
             console.error('Error during logout', error);
         }
     };
+    
     
 
     const toggleDropdown = () => {

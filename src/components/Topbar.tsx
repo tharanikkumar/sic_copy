@@ -7,7 +7,7 @@ const Topbar = () => {
     <div className="flex items-center space-x-6">
       <Link to={"/admindashboard"}><div className="text-lg font-bold">Verifier</div></Link>
       <Link to={"/admin_ideaevaluator"}><div className="text-lg font-bold">Idea Evaluator</div></Link>
-      <Link to={"/addideas"}><div className="text-lg font-bold">Ideas</div></Link>
+      <Link to={"/addideas"}><div className="text-lg font-bold"> Add Ideas</div></Link>
       <div className="absolute top-30 right-4">
   <ProfileDropdown userName="Admin" />
 </div>

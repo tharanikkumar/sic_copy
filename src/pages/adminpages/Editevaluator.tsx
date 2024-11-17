@@ -5,41 +5,45 @@ import { LabelInputContainer } from '../adminpages/Login';
 import { useState, useEffect } from 'react';
 import { BACKEND_URL } from "../../../config";
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Select  } from '../../components/ui/Input';
 import { toast } from 'react-toastify';
 const EditEvaluator = () => {
   const [formData, setFormData] = useState({
-    email: 'johndoe@example.com',
-    password: '123456',
-    first_name: 'John',
-    last_name: 'Doe',
-    gender: 'Male',
-    alternative_email: 'johndoe.alt@example.com',
-    phone_number: '1234567890',
-    alternative_phone_number: '0987654321',
-    college_name: 'Sample University',
-    designation: 'Professor',
-    total_experience: '10',
-    city: 'Sample City',
-    state: 'Sample State',
-    knowledge_domain: 'Engineering',
-    theme_preference_1: '1',
-    theme_preference_2: '2',
-    theme_preference_3: '3',
-    expertise_in_startup_value_chain: 'Mentorship',
-    role_interested: 'Evaluator',
-    delete_status: 0,
-    evaluator_status: 1,
+    email: '',
+    password: '',
+    first_name: '',
+    last_name: '',
+    gender: '',
+    alternate_email: '',
+    phone_number: '',
+    alternate_phone_number: '',
+    college_name: '',
+    designation: '',
+    total_experience: '',
+    city: '',
+    state: '',
+    knowledge_domain: '',
+    theme_preference_1: '',
+    theme_preference_2: '',
+    theme_preference_3: '',
+    expertise_in_startup_value_chain: '',
+    role_interested: '',
+    delete_status: '',
+    evaluator_status: '',
   });
-
+  const { evaluator_id } = useParams();
+  console.log(evaluator_id);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchEvaluatorData = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}evaluator/1`);
-        setFormData(response.data);
+        const response = await axios.get(`${BACKEND_URL}getevaluator1.php?evaluator_id=${evaluator_id}`,{
+          withCredentials: true
+        });
+        console.log(response.data);
+        setFormData(response.data.evaluator);
       } catch (error) {
         console.error("Failed to fetch evaluator data:", error);
       }
@@ -111,7 +115,7 @@ const EditEvaluator = () => {
         <div className="bg-sky-900 text-white text-3xl font-bold py-4 px-6 text-center">
           Edit Evaluator
         </div>
-        <Link to="/"> 
+        <Link to="/admindashboard"> 
           <button className="bg-cyan-900 mt-4 text-white py-2 px-4 rounded-md hover:bg-cyan-800">Back</button>
         </Link>
         <form className="p-6 md:p-9 space-y-6" onSubmit={handleSubmit}>
@@ -163,19 +167,7 @@ const EditEvaluator = () => {
                 name="alternative_email"
                 type="email"
                 className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.alternative_email}
-                onChange={handleInputChange}
-              />
-            </LabelInputContainer>
-            <LabelInputContainer className="mb-4">
-              <Label htmlFor="alternative_email">Password</Label>
-              <Input
-                id="password"
-                placeholder="Password"
-                name="password"
-                type="password"
-                className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.password}
+                value={formData.alternate_email}
                 onChange={handleInputChange}
               />
             </LabelInputContainer>
@@ -202,7 +194,7 @@ const EditEvaluator = () => {
                 name="alternative_phone_number"
                 type="text"
                 className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.alternative_phone_number}
+                value={formData.alternate_phone_number}
                 onChange={handleInputChange}
                 maxLength={10}
               />
@@ -307,11 +299,41 @@ const EditEvaluator = () => {
     value={formData.theme_preference_1}
     onChange={handleInputChange}
   >
-    <option value="" disabled>Select a theme</option>
-    <option value="1">Light Theme</option>
-    <option value="2">Dark Theme</option>
-    <option value="3">Blue Theme</option>
-    <option value="4">Green Theme</option>
+     <option value="" disabled>Select a theme</option>
+    <option value="1">Food Processing/Nutrition/Biotech</option>
+    <option value="2">Healthcare & Biomedical devices</option>
+    <option value="3">ICT, Cyber-physical systems, Blockchain, Cognitive computing, Cloud computing, AI & ML</option>
+    <option value="4">Infrastructure</option>
+    <option value="5">IoT based technologies (e.g. Security & Surveillance systems etc)</option>
+    <option value="6">Consumer Goods and Retail</option>
+    <option value="7">Defence & Security</option>
+    <option value="8">Education</option>
+    <option value="9">Fashion and Textiles</option>
+    <option value="10">Finance Life Sciences</option>
+    <option value="11">Agriculture & Rural Development</option>
+    <option value="12">Clean & Potable water</option>
+    <option value="13">Software-Web App Development</option>
+    <option value="14">Sports & Fitness</option>
+    <option value="15">Sustainable Environment</option>
+    <option value="16">Travel & Tourism</option>
+    <option value="17">Waste Management/Waste to Wealth Creation</option>
+    <option value="18">Smart Cities</option>
+    <option value="19">Smart Education</option>
+    <option value="20">Smart Textiles</option>
+    <option value="21">Smart Vehicles/Electric vehicle/Electric vehicle motor and battery technology</option>
+    <option value="22">Software-Mobile App Development</option>
+    <option value="23">Manufacturing</option>
+    <option value="24">Mining, Metals, Materials</option>
+    <option value="25">Other Emerging Areas Innovation for Start-ups</option>
+    <option value="26">Renewable and Affordable Energy</option>
+    <option value="27">Robotics and Drones</option>
+    <option value="28">Venture Planning and Enterprise/Startup</option>
+    <option value="29">IP Generation & Protection</option>
+    <option value="30">Business Modeling/Plan Development</option>
+    <option value="31">Design Thinking</option>
+    <option value="32">Idea Generation & Validation</option>
+    <option value="33">Incubation/Innovation Management</option>
+    <option value="34">Investment and Market Analyst</option>
   </Select>
 </LabelInputContainer>
 
@@ -324,11 +346,41 @@ const EditEvaluator = () => {
     value={formData.theme_preference_2}
     onChange={handleInputChange}
   >
-    <option value="" disabled>Select a theme</option>
-    <option value="1">Light Theme</option>
-    <option value="2">Dark Theme</option>
-    <option value="3">Blue Theme</option>
-    <option value="4">Green Theme</option>
+   <option value="" disabled>Select a theme</option>
+    <option value="1">Food Processing/Nutrition/Biotech</option>
+    <option value="2">Healthcare & Biomedical devices</option>
+    <option value="3">ICT, Cyber-physical systems, Blockchain, Cognitive computing, Cloud computing, AI & ML</option>
+    <option value="4">Infrastructure</option>
+    <option value="5">IoT based technologies (e.g. Security & Surveillance systems etc)</option>
+    <option value="6">Consumer Goods and Retail</option>
+    <option value="7">Defence & Security</option>
+    <option value="8">Education</option>
+    <option value="9">Fashion and Textiles</option>
+    <option value="10">Finance Life Sciences</option>
+    <option value="11">Agriculture & Rural Development</option>
+    <option value="12">Clean & Potable water</option>
+    <option value="13">Software-Web App Development</option>
+    <option value="14">Sports & Fitness</option>
+    <option value="15">Sustainable Environment</option>
+    <option value="16">Travel & Tourism</option>
+    <option value="17">Waste Management/Waste to Wealth Creation</option>
+    <option value="18">Smart Cities</option>
+    <option value="19">Smart Education</option>
+    <option value="20">Smart Textiles</option>
+    <option value="21">Smart Vehicles/Electric vehicle/Electric vehicle motor and battery technology</option>
+    <option value="22">Software-Mobile App Development</option>
+    <option value="23">Manufacturing</option>
+    <option value="24">Mining, Metals, Materials</option>
+    <option value="25">Other Emerging Areas Innovation for Start-ups</option>
+    <option value="26">Renewable and Affordable Energy</option>
+    <option value="27">Robotics and Drones</option>
+    <option value="28">Venture Planning and Enterprise/Startup</option>
+    <option value="29">IP Generation & Protection</option>
+    <option value="30">Business Modeling/Plan Development</option>
+    <option value="31">Design Thinking</option>
+    <option value="32">Idea Generation & Validation</option>
+    <option value="33">Incubation/Innovation Management</option>
+    <option value="34">Investment and Market Analyst</option>
   </Select>
 </LabelInputContainer>
 
@@ -342,10 +394,40 @@ const EditEvaluator = () => {
     onChange={handleInputChange}
   >
     <option value="" disabled>Select a theme</option>
-    <option value="1">Light Theme</option>
-    <option value="2">Dark Theme</option>
-    <option value="3">Blue Theme</option>
-    <option value="4">Green Theme</option>
+    <option value="1">Food Processing/Nutrition/Biotech</option>
+    <option value="2">Healthcare & Biomedical devices</option>
+    <option value="3">ICT, Cyber-physical systems, Blockchain, Cognitive computing, Cloud computing, AI & ML</option>
+    <option value="4">Infrastructure</option>
+    <option value="5">IoT based technologies (e.g. Security & Surveillance systems etc)</option>
+    <option value="6">Consumer Goods and Retail</option>
+    <option value="7">Defence & Security</option>
+    <option value="8">Education</option>
+    <option value="9">Fashion and Textiles</option>
+    <option value="10">Finance Life Sciences</option>
+    <option value="11">Agriculture & Rural Development</option>
+    <option value="12">Clean & Potable water</option>
+    <option value="13">Software-Web App Development</option>
+    <option value="14">Sports & Fitness</option>
+    <option value="15">Sustainable Environment</option>
+    <option value="16">Travel & Tourism</option>
+    <option value="17">Waste Management/Waste to Wealth Creation</option>
+    <option value="18">Smart Cities</option>
+    <option value="19">Smart Education</option>
+    <option value="20">Smart Textiles</option>
+    <option value="21">Smart Vehicles/Electric vehicle/Electric vehicle motor and battery technology</option>
+    <option value="22">Software-Mobile App Development</option>
+    <option value="23">Manufacturing</option>
+    <option value="24">Mining, Metals, Materials</option>
+    <option value="25">Other Emerging Areas Innovation for Start-ups</option>
+    <option value="26">Renewable and Affordable Energy</option>
+    <option value="27">Robotics and Drones</option>
+    <option value="28">Venture Planning and Enterprise/Startup</option>
+    <option value="29">IP Generation & Protection</option>
+    <option value="30">Business Modeling/Plan Development</option>
+    <option value="31">Design Thinking</option>
+    <option value="32">Idea Generation & Validation</option>
+    <option value="33">Incubation/Innovation Management</option>
+    <option value="34">Investment and Market Analyst</option>
   </Select>
 </LabelInputContainer>
 

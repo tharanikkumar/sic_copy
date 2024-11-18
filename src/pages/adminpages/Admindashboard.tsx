@@ -14,7 +14,28 @@ const AdminDashboard = () => {
   const [evaluators, setEvaluators] = useState([]);
   const [stats, setStats] = useState({
   });
+  const fetchEvaluators = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}getevaluator.php`, {
+        withCredentials: true,
+      });
+        
+        setEvaluators(response.data.evaluators);
+      
+        setStats({
+          totalEvaluators: response.data.common_statistics.total_evaluators,
+          pendingVerifications: response.data.common_statistics.pending_evaluators,
+          totalIdeas: response.data.common_statistics.ideas_registered,
+        });
 
+    } catch (error) {
+      console.error('Error fetching evaluators:', error);
+    }
+  };
+  useEffect(() => {
+
+    fetchEvaluators();
+  }, []);
   const handleVerifyClick = (evaluator: any) => {
     setSelectedEvaluator(evaluator);
     setShowVerifyDialog(true);
@@ -23,11 +44,11 @@ const AdminDashboard = () => {
 
   const handleVerifyConfirm = () => {
     if (!selectedEvaluator) return;
-  console.log(selectedEvaluator);
-    axios.post(`${BACKEND_URL}approve_evaluator.php?evaluator_id=${selectedEvaluator}`,{selectedEvaluator}, {
-      withCredentials: true  
-    })
-    .then((response) => {
+    fetchEvaluators();
+  axios.get(`${BACKEND_URL}approve_evaluator.php`, {
+    params: { evaluator_id: selectedEvaluator },
+    withCredentials: true
+  }).then((response) => {
       console.log(response.data);
       setEvaluators(evaluators.filter((evaluator) => evaluator.id !== selectedEvaluator));
       setShowVerifyDialog(false);
@@ -48,28 +69,7 @@ const AdminDashboard = () => {
   const handleEditClick = (evaluator: any) => {
     console.log(`Edit evaluator: ${evaluator.name}`);
   };
-useEffect(() => {
-    const fetchEvaluators = async () => {
-      try {
-        const response = await axios.get(`${BACKEND_URL}getevaluator.php`, {
-          withCredentials: true,
-        });
-          
-          setEvaluators(response.data.evaluators);
-        
-          setStats({
-            totalEvaluators: response.data.common_statistics.total_evaluators,
-            pendingVerifications: response.data.common_statistics.pending_evaluators,
-            totalIdeas: response.data.common_statistics.ideas_registered,
-          });
-  
-      } catch (error) {
-        console.error('Error fetching evaluators:', error);
-      }
-    };
 
-    fetchEvaluators();
-  }, []);
 
   return (
     <div>
@@ -96,7 +96,10 @@ useEffect(() => {
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-lg">
+      <div className="mr-20 ml-20 mt-10 mb-6 bg-white rounded-lg overflow-hidden">
+
         <h2 className="text-2xl font-semibold mb-4">Evaluator Details</h2>
+
         <table className="w-full table-auto">
           <thead>
             <tr>
@@ -158,6 +161,7 @@ useEffect(() => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

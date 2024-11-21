@@ -12,7 +12,7 @@ const Ideaevaluator = () => {
   const [currentIdeaId, setCurrentIdeaId] = useState(null);
   const [evaluators, setEvaluators] = useState([]);
 
-  // Fetch evaluators from the backend
+ 
   const fetchEvaluators = async () => {
     try {
       const response = await axios.get(`${BACKEND_URL}getevaluators.php`, { withCredentials: true });
@@ -21,8 +21,29 @@ const Ideaevaluator = () => {
       console.error('Error fetching evaluators:', error);
     }
   };
+  const downloadCSV = () => {
+    if (evaluators.length === 0) return; // If no evaluators, don't attempt to download
 
-  // Open the dialog for assigning evaluators
+    const csvData = convertToCSV(evaluators);
+
+    // Create a Blob with the CSV data
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'evaluators.csv');
+    document.body.appendChild(link); // Append link to body (not visible)
+    link.click(); // Trigger download
+    document.body.removeChild(link); // Clean up by removing the link
+  };
+
+
+  const convertToCSV = (data) => {
+    const headers = Object.keys(data[0]).join(','); // Get column headers from the keys of the first object
+    const rows = data.map((item) => Object.values(item).join(',')); // Get each row's values
+    return [headers, ...rows].join('\n'); // Join headers and rows with new lines
+  };
+
   const handleOpenDialog = (ideaId) => {
     setCurrentIdeaId(ideaId);
     setIsDialogOpen(true);
@@ -60,7 +81,7 @@ const Ideaevaluator = () => {
       });
   };
 
-  // Fetch ideas and evaluators when the component mounts
+  
   useEffect(() => {
     const fetchIdeas = async () => {
       try {
@@ -83,7 +104,14 @@ const Ideaevaluator = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold">Admin Idea Evaluator</h1>
       </div>
-
+      <div className="flex space-x-4 items-center mb-6">
+      <button onClick={downloadCSV} className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+        Download Evaluators as CSV
+      </button>
+      <button onClick={downloadCSV} className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+       Upload Csv for adding Ideas and mapping
+      </button>
+      </div>
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <div className="mr-20 ml-20 mt-10 mb-6 bg-white rounded-lg overflow-hidden">
           <h2 className="text-2xl font-semibold mb-4">Idea Details</h2>
@@ -112,7 +140,7 @@ const Ideaevaluator = () => {
                     </Link>
                   </td>
                   <td className="border px-4 py-2 space-x-2">
-                    {idea.assigned_count < 3 && (
+                    {idea.assigned_count < 1 && (
                       <button
                         onClick={() => handleOpenDialog(idea.id)}
                         className="ml-2 px-3 py-1 rounded bg-yellow-100 text-yellow-700"
@@ -124,7 +152,14 @@ const Ideaevaluator = () => {
                       <button
                         className="ml-2 px-3 py-1 rounded bg-green-100 text-green-700"
                       >
-                       Idea Assigned
+                       Idea Assigned count =3
+                      </button>
+                    )}
+                    {idea.assigned_count === 2 && (
+                      <button
+                        className="ml-2 px-3 py-1 rounded bg-green-100 text-green-700"
+                      >
+                       Idea Assigned count =2
                       </button>
                     )}
                   </td>
@@ -133,11 +168,14 @@ const Ideaevaluator = () => {
                     {idea.status_id === 3 ? (
                       <span className="text-gray-500">Not Assigned</span>
                     ) : idea.status_id === 2 ? (
-                      <span className="text-red-500">Not Recommended</span>
+                      <span className="text-yellow-500">Not Evaluated</span>
                     ) : idea.status_id === 1 ? (
                       <span className="text-green-500">Recommended</span>
-                    ) : (
-                      <span className="text-gray-400">Unknown Status</span>
+                    ) : 
+                    idea.status_id === 0 ? (
+                      <span className="text-red-500"> Not Recommended</span>
+                    ) :(
+                      <span className="text-red-400">Unknows status </span>
                     )}
                   </td>
                 </tr>

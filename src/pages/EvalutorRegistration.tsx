@@ -396,7 +396,7 @@ console.log(response.data);
     <option value="25">Other Emerging Areas Innovation for Start-ups</option>
     <option value="26">Renewable and Affordable Energy</option>
     <option value="27">Robotics and Drones</option>
-    <option value="28">Venture Planning and Enterprise/Startup</option>
+    <option value="28"></option>
     <option value="29">IP Generation & Protection</option>
     <option value="30">Business Modeling/Plan Development</option>
     <option value="31">Design Thinking</option>
@@ -503,30 +503,61 @@ console.log(response.data);
 
 
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="expertise_in_startup_value_chain">Expertise in Startup Value Chain</Label>
-              <Input
-                id="expertise_in_startup_value_chain"
-                placeholder="Expertise in Startup Value Chain"
-                name="expertise_in_startup_value_chain"
-                type="text"
-                className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.expertise_in_startup_value_chain}
-                onChange={handleInputChange}
-              />
+              <Label htmlFor="expertise_in_startup_value_chain"> Area of Expertise in Startup Value Chain</Label>
+              <Select
+    id="theme_preference_3"
+    name="theme_preference_3"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_3}
+    onChange={handleInputChange}
+  >
+    
+    <option value="Business Modeling/Plan Development">Business Modeling/Plan Development</option>
+    <option value="Design Thinking">Design Thinking</option>
+    <option value="Idea Generation & Validation">Idea Generation & Validation</option>
+    <option value="
+Incubation/Innovation Management">
+    Incubation/Innovation Management</option>
+    <option value="Investment and Market Analyst">
+    Investment and Market Analyst</option>   
+    <option value="IP Generation & Protection">
+IP Generation & Protection</option>   <option value="
+PoC Validation">
+   PoC Validationt</option>   <option value="
+Policy Expert (Start-up and Innovations)">
+   Policy Expert (Start-up and Innovations)</option>   <option value="
+
+Prototype Development">
+Prototype Development</option>   <option value="
+Technology Transfer">
+    Technology Transfer</option>   <option value="
+Venture Planning and Enterprise/Startup">
+    Venture Planning and Enterprise/Startup</option>   
+  
+  </Select>
             </LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
               <Label htmlFor="role_interested">Role Interested</Label>
-              <Input
-                id="role_interested"
-                placeholder="Role Interested"
-                name="role_interested"
-                type="text"
-                className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
-                value={formData.role_interested}
-                onChange={handleInputChange}
-              />
+              <Select
+    id="theme_preference_3"
+    name="theme_preference_3"
+    className="p-4 text-lg w-full h-16 border border-gray-300 rounded-md"
+    value={formData.theme_preference_3}
+    onChange={handleInputChange}
+  >
+    <option value="Mentor">Mentor</option>
+    <option value="Evaluator">Evaluator</option>
+    <option value="Expert Speaker">Expert Speaker</option>
+    <option value="Investor">Investor</option>
+    <option value="Product Designer">Product Designer</option>
+    <option value="IP Expert">IP Expert</option>
+    <option value="Prototype Development">Prototype Development</option>
+
+  </Select>
             </LabelInputContainer>
+           
+
             
           </div>
 
@@ -537,6 +568,7 @@ console.log(response.data);
             Register
           </button>
         </form>
+        
       </div>
       <ToastContainer
 position="top-right"

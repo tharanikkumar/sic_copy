@@ -12,7 +12,7 @@ const Ideaevaluator = () => {
 
   const fetchIdeas = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}getideas.php`, { withCredentials: true });
+      const response = await axios.get(`${BACKEND_URL}/getideas.php`, { withCredentials: true });
       setIdeas(response.data.ideas);
     } catch (error) {
       console.error('Error fetching ideas:', error);
@@ -36,7 +36,7 @@ const Ideaevaluator = () => {
     formData.append('file', csvFile);
 
     try {
-      const response = await axios.post(`${BACKEND_URL}upload_csv_api.php`, formData, { withCredentials: true });
+      const response = await axios.post(`${BACKEND_URL}/upload_csv_api.php`, formData, { withCredentials: true });
 
       // Log the complete response for debugging
       console.log('Backend Response:', response);

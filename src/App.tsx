@@ -8,6 +8,7 @@ import EditEvaluator from './pages/adminpages/Editevaluator';
 import Ideainput from './pages/adminpages/Ideainput';
 import DetailedIdea from './pages/adminpages/Detailedidea';
 import { EvaluatorDashboard } from './pages/adminpages/Evaluatordashboard';
+import { ScoreDashboard } from './pages/adminpages/Scoredashboard';
 import { ProfileEvaluatorPage } from "./pages/adminpages/ProfileEvaluatorPage";
 
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/evaluator_registration" element={<EvalutorRegistration />} />
           <Route path="/admindashboard" element={<Admindashboard />} />
           <Route path="/evaluatordashboard" element={<EvaluatorDashboard />} />
+          <Route path="/scoredashboard" element={<ScoreDashboard />} />
           <Route path="/profileevaluator" element={<ProfileEvaluatorPage />}/>
           <Route path='/addideas' element={<Ideainput />} />
           <Route path='/detailedidea/:idea_id' element={<DetailedIdea />} />
